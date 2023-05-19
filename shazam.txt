@@ -1,0 +1,653 @@
+--------------------------------------------------------
+#preprocessing 
+
+1)binary
+
+# importing libraries
+import pandas
+import scipy
+import numpy
+from sklearn.preprocessing import MinMaxScaler
+
+
+# preparating of dataframe using the data at given link and defined columns list
+dataframe = pandas.read_csv("titanic.csv")
+x=dataframe.iloc[:,1:3]
+array = x.values
+
+# separate array into input and output components
+X = array[:,0:8]
+Y = array[:,1]
+from sklearn.preprocessing import Binarizer
+binarizer = Binarizer(threshold = 0.0).fit(X)
+binaryX = binarizer.transform(X)
+  
+# summarize transformed data
+numpy.set_printoptions(precision = 3)
+print(binaryX[0:5,:])
+______________________________________________________
+2)minmax
+
+# importing libraries
+import pandas
+import scipy
+import numpy
+from sklearn.preprocessing import MinMaxScaler
+
+
+# preparating of dataframe using the data at given link and defined columns list
+dataframe = pandas.read_csv("titanic.csv")
+x=dataframe.iloc[:,1:3]
+array = x.values
+
+# separate array into input and output components
+X = array[:,0:8]
+Y = array[:,1]
+
+# initialising the MinMaxScaler
+scaler = MinMaxScaler(feature_range=(0, 1))
+# learning the statistical parameters for each of the data and transforming
+rescaledX = scaler.fit_transform(X)
+
+# summarize transformed data
+numpy.set_printoptions(precision=3)
+print(rescaledX[0:5,:])
+______________________________________________________
+
+3)standardise
+
+# importing libraries
+import pandas
+import scipy
+import numpy
+from sklearn.preprocessing import MinMaxScaler
+### data set link
+url = "https://archive.ics.uci.edu/ml/machine-learning-databases/pima-indians-diabetes/pima-indians-diabetes.data"
+# data parameters
+names = ['preg', 'plas', 'pres', 'skin', 'test', 'mass', 'pedi', 'age', 'class']
+  
+# preparating of dataframe using the data at given link and defined columns list
+dataframe = pandas.read_csv(url, names = names)
+array = dataframe.values##
+
+# preparating of dataframe using the data at given link and defined columns list
+dataframe = pandas.read_csv("titanic.csv")
+x=dataframe.iloc[:,1:3]
+array = x.values
+
+# separate array into input and output components
+X = array[:,0:8]
+Y = array[:,1]
+
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler().fit(X)
+rescaledX = scaler.transform(X)
+  
+# summarize transformed data
+numpy.set_printoptions(precision = 3)
+print(rescaledX[0:5,:])
+
+
+# category to num
+from sklearn.preprocessing import LabelEncoder
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+df=pd.read_csv("Student Mental Health.csv")
+le=LabelEncoder()
+label=le.fit_transform(df['Choose your gender'])
+label
+df.drop(['Choose your gender'],axis=1,inplace=True)
+df['Choose your gender']=label
+l1=le.fit_transform(df['Do you have Anxiety?'])
+df.drop(['Do you have Anxiety?'],axis=1,inplace=True)
+df['Do you have Anxiety?']=l1
+df
+
+--------------------------------------------------------
+
+#linear regress w/o sklearn
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+def estimate_coef(x, y):
+	# number of observations/points
+	n = np.size(x)
+
+	# mean of x and y vector
+	m_x = np.mean(x)
+	m_y = np.mean(y)
+
+	# calculating cross-deviation and deviation about x
+	SS_xy = np.sum(y*x) - n*m_y*m_x
+	SS_xx = np.sum(x*x) - n*m_x*m_x
+
+	# calculating regression coefficients
+	b_1 = SS_xy / SS_xx
+	b_0 = m_y - b_1*m_x
+
+	return (b_0, b_1)
+
+def plot_regression_line(x, y, b):
+	# plotting the actual points as scatter plot
+	plt.scatter(x, y, color = "m",
+			marker = "o", s = 30)
+
+	# predicted response vector
+	y_pred = b[0] + b[1]*x
+
+	# plotting the regression line
+	plt.plot(x, y_pred, color = "g")
+
+	# putting labels
+	plt.xlabel('x')
+	plt.ylabel('y')
+
+	# function to show plot
+	plt.show()
+
+def main():
+	# observations / data
+	x = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+	y = np.array([1, 3, 2, 5, 7, 8, 8, 9, 10, 12])
+
+	# estimating coefficients
+	b = estimate_coef(x, y)
+	print("Estimated coefficients:\nb_0 = {} \
+    \nb_1 = {}".format(b[0], b[1]))
+
+	# plotting regression line
+	plot_regression_line(x, y, b)
+
+if __name__ == "__main__":
+	main()
+
+--------------------------------------------------------
+
+#linear reg w Sklearn
+
+import numpy as np 
+import matplotlib.pyplot as mtp 
+import pandas as pd 
+data_set=pd.read_csv('Salary_Data.csv') 
+x=data_set.iloc[:,:1].values
+y=data_set.iloc[:,:1].values 
+
+# Splitting the dataset into training and test set
+from sklearn.model_selection import train_test_split 
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=1/3,random_state=0) 
+
+#Fitting the Simple Linear Regression model to the training dataset  
+from sklearn.linear_model import LinearRegression 
+regressor=LinearRegression() 
+regressor.fit(x_train, y_train) 
+
+print('Regression Coefficients are: ', regressor.coef_)  
+print('Variance score is: {}'.format(regressor.score(x_test, y_test))) 
+
+#Prediction of Test and Training set result
+y_pred= regressor.predict(x_test) 
+x_pred= regressor.predict(x_train) 
+
+# visualizing the Training set results
+mtp.scatter(x_train, y_train, color="green")   
+mtp.plot(x_train, x_pred, color="red")    
+mtp.title("Salary vs Experience (Training Dataset)")  
+mtp.xlabel("Years of Experience")  
+mtp.ylabel("Salary(In Rupees)")  
+mtp.show()   
+
+
+#visualizing the Test set results  
+mtp.scatter(x_test, y_test, color="blue")   
+mtp.plot(x_train, x_pred, color="red")    
+mtp.title("Salary vs Experience (Test Dataset)")  
+mtp.xlabel("Years of Experience")  
+mtp.ylabel("Salary(In Rupees)")  
+mtp.show()
+
+--------------------------------------------------------
+
+# Multiple Linear Regression
+
+# 50_StartUps Code
+
+# Importing the libraries
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# Importing the dataset
+dataset = pd.read_csv('50_Startups.csv')
+X = dataset.iloc[:, :-1]
+y = dataset.iloc[:, 4]
+
+# Convert the column into categorical columns
+states = pd.get_dummies(X['State'], drop_first=True)
+
+# Drop the state column
+X = X.drop('State', axis=1)
+
+# Concatenate the dummy variables
+X = pd.concat([X, states], axis=1)
+
+# Splitting the dataset into the Training set and Test set
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
+
+# Fitting Multiple Linear Regression to the Training set
+from sklearn.linear_model import LinearRegression
+regressor = LinearRegression()
+regressor.fit(X_train, y_train)
+
+# Predicting the Test set results
+y_pred = regressor.predict(X_test)
+
+# Displaying the predicted values
+print("Predicted values:")
+print(y_pred)
+
+# Calculating the R-squared score
+from sklearn.metrics import r2_score
+score = r2_score(y_test, y_pred)
+
+# Displaying the R-squared score
+print("R-squared score:", score)
+
+--------------------------------------------------------
+
+# multicollinearity
+
+import pandas as pd
+import numpy as np
+import statsmodels.api as sm
+df=pd.read_csv("Advertising.csv")
+x=df[['TV','radio','newspaper']]
+y=df['sales']
+df.head()
+
+x=sm.add_constant(x)
+x
+
+model=sm.OLS(y,x).fit()
+model.summary()
+
+x.iloc[:,1:].corr()
+
+
+--------------------------------------------------------
+
+# Decision Tree
+
+import pandas as pd
+df = pd.read_csv("titanic.csv")
+df.head()
+
+df.drop(['PassengerId','Name','SibSp','Parch','Ticket','Cabin','Embarked'],axis='columns',inplace=True)
+df.head()
+
+inputs = df.drop('Survived',axis='columns')
+target = df.Survived
+inputs.Sex = inputs.Sex.map({'male': 1, 'female': 2})
+inputs.Age[:10]
+
+inputs.Age = inputs.Age.fillna(inputs.Age.mean())
+inputs.head()
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(inputs,target,test_size=0.2)
+len(X_train)
+len(X_test) 
+from sklearn import tree
+model = tree.DecisionTreeClassifier()
+model.fit(X_train,y_train)
+model.score(X_test,y_test)
+# model.predict([[0,3,1,22]])
+
+--------------------------------------------------------
+
+# Random Forest w/o CSV
+
+import pandas as pd
+from sklearn.datasets import load_iris
+
+# Load the Iris dataset
+iris = load_iris()
+
+# Display the available attributes and methods of the iris object
+dir(iris)
+
+# Create a DataFrame from the iris data, with column names as feature names
+df = pd.DataFrame(iris.data, columns=iris.feature_names)
+df.head()
+
+# Add a 'target' column to the DataFrame containing the target variable
+df['target'] = iris.target
+df.head()
+
+from sklearn.model_selection import train_test_split
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(df.drop(['target'], axis='columns'), iris.target, test_size=0.2)
+
+from sklearn.ensemble import RandomForestClassifier
+
+# Create a Random Forest Classifier object
+model = RandomForestClassifier()
+
+# Train the model using the training data
+model.fit(X_train, y_train)
+
+# Calculate the accuracy score on the testing data
+model.score(X_test, y_test)
+
+# Create another Random Forest Classifier object with 10 estimators
+model = RandomForestClassifier(n_estimators=10)
+
+# Train the model with 10 estimators using the training data
+model.fit(X_train, y_train)
+
+# Calculate the accuracy score on the testing data
+model.score(X_test, y_test)
+
+--------------------------------------------------------
+
+# Random Forest w CSV
+
+import pandas as pd
+
+# Read the Titanic dataset from a CSV file
+df = pd.read_csv("titanic.csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Drop unnecessary columns from the DataFrame
+df.drop(['PassengerId','Name','SibSp','Parch','Ticket','Cabin','Embarked'], axis='columns', inplace=True)
+
+# Display the modified DataFrame after dropping columns
+df.head()
+
+# Separate the inputs (features) and the target variable
+inputs = df.drop('Survived', axis=1)
+target = df.Survived
+
+# Map the 'Sex' column to numeric values (male: 1, female: 2)
+inputs.Sex = inputs.Sex.map({'male': 1, 'female': 2})
+
+# Fill missing values in the 'Age' column with the mean age
+inputs.Age = inputs.Age.fillna(inputs.Age.mean())
+
+# Display the modified DataFrame after data preprocessing
+inputs.head()
+
+from sklearn.model_selection import train_test_split
+
+# Split the data into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(inputs, target, test_size=0.2)
+
+from sklearn.ensemble import RandomForestClassifier
+
+# Create a Random Forest Classifier object with 10 estimators
+model = RandomForestClassifier(n_estimators=10)
+
+# Train the model using the training data
+model.fit(x_train, y_train)
+
+# Calculate the accuracy score on the testing data
+model.score(x_test, y_test)
+
+--------------------------------------------------------
+
+PLOT GRAPHS
+
+# Line Graph
+______________________________________________________
+
+from matplotlib import pyplot as plt    
+#ploting our canvas    
+plt.plot([1,2,3],[4,5,1])    
+#display the graph    
+plt.show() 
+______________________________________________________
+
+from matplotlib import pyplot as plt    
+    
+x = [1,2,3]    
+y = [10,11,12]    
+    
+plt.plot(x,y)    
+    
+plt.title("Line graph")    
+plt.ylabel('Y axis')    
+plt.xlabel('X axis')    
+plt.show()  
+
+______________________________________________________
+
+from matplotlib import pyplot as plt    
+from matplotlib import style    
+    
+style.use('ggplot')    
+x = [10, 12, 13]    
+y = [8, 16, 6]    
+x2 = [8, 15, 11]    
+y2 = [6, 15, 7]    
+plt.plot(x, y, 'b', label='line one', linewidth=5)    
+plt.plot(x2, y2, 'r', label='line two', linewidth=5)    
+plt.title('Epic Info')    
+fig = plt.figure()    
+plt.ylabel('Y axis')    
+plt.xlabel('X axis')    
+  
+plt.show()  
+------------------------------------------
+
+# Bar Graph
+
+from matplotlib import pyplot as plt    
+
+Names = ['Arun','James','Ricky','Patrick']    
+Marks = [51,87,45,67]    
+plt.bar(Names,Marks,color = 'blue')    
+plt.title('Result')    
+plt.xlabel('Names')    
+plt.ylabel('Marks')    
+plt.show()
+
+--------------------------------------------------------
+
+# Pie Chart
+
+from matplotlib import pyplot as plt    
+    
+# Pie chart, where the slices will be ordered and plotted counter-clockwise:    
+Aus_Players = 'Smith', 'Finch', 'Warner', 'Lumberchane'    
+Runs = [42, 32, 18, 24]    
+explode = (0.1, 0, 0, 0)  # it "explode" the 1st slice     
+    
+fig1, ax1 = plt.subplots()    
+ax1.pie(Runs, explode=explode, labels=Aus_Players, autopct='%1.1f%%',    
+        shadow=True, startangle=90)    
+
+# Equal aspect ratio ensures that pie is drawn as a circle 
+ax1.axis('equal')   
+    
+plt.show()
+
+--------------------------------------------------------
+# Histogram 
+
+from matplotlib import pyplot as plt    
+from matplotlib import pyplot as plt    
+percentage = [97,54,45,10, 20, 10, 30,97,50,71,40,49,40,74,95,80,65,82,70,65,55,70,75,60,52,44,43,42,45]    
+number_of_student = [0,10,20,30,40,50,60,70,80,90,100]    
+plt.hist(percentage, number_of_student, histtype='bar', rwidth=0.8)    
+plt.xlabel('percentage')    
+plt.ylabel('Number of people')    
+plt.title('Histogram')    
+plt.show()    
+
+------------------------------------------------
+# Scatter plot
+
+from matplotlib import pyplot as plt    
+from matplotlib import style    
+style.use('ggplot')    
+    
+x = [4,8,12]    
+y = [19,11,7]    
+    
+x2 = [7,10,12]    
+y2 = [8,18,24]    
+    
+plt.scatter(x, y)    
+    
+plt.scatter(x2, y2, color='g')    
+    
+plt.title('Epic Info')    
+plt.ylabel('Y axis')    
+plt.xlabel('X axis')    
+    
+plt.show()    
+
+
+------------------------------------------------
+
+SEABORN PLOTS
+
+# ScatterPlot
+
+import seaborn as sns  
+sns.set()  
+  
+# Load the example iris dataset  
+planets = sns.load_dataset("planets")  
+  
+cmap = sns.cubehelix_palette(rot=-.5, as_cmap=True)  
+ax = sns.scatterplot(x="distance", y="orbital_period",  
+                     hue="year", size="mass",  
+                     palette=cmap, sizes=(100, 100),  
+                     data=planets)
+
+
+------------------------------------------------
+
+# LinePlot
+import numpy as np  
+import pandas as pd  
+import seaborn as sns  
+sns.set(style="whitegrid")  
+  
+rs = np.random.RandomState(365)  
+values = rs.randn(365, 4).cumsum(axis=0)  
+dates = pd.date_range("1 1 2016", periods=365, freq="D")  
+data = pd.DataFrame(values, dates, columns=["A", "B", "C", "D"])  
+data = data.rolling(10).mean()  
+  
+sns.lineplot(data=data, palette="tab10", linewidth=2.5) 
+
+
+------------------------------------------------
+
+# Bar Plot
+import numpy as np  
+import seaborn as sns  
+import matplotlib.pyplot as plt  
+sns.set(style="white", context="talk")  
+rs = np.random.RandomState(8)  
+  
+# Set up the matplotlib figure  
+f, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(7, 5), sharex=True)  
+  
+# Generate some sequential data  
+x = np.array(list("ABCDEFGHIJ"))  
+y1 = np.arange(1, 11)  
+sns.barplot(x=x, y=y1, palette="rocket", ax=ax1)  
+ax1.axhline(0, color="k", clip_on=False)  
+ax1.set_ylabel("Sequential")  
+  
+# Center the data to make it diverging  
+y2 = y1 - 5.5  
+sns.barplot(x=x, y=y2, palette="vlag", ax=ax2)  
+ax2.axhline(0, color="k", clip_on=False)  
+ax2.set_ylabel("Diverging")  
+  
+# Randomly reorder the data to make it qualitative  
+y3 = rs.choice(y1, len(y1), replace=False)  
+sns.barplot(x=x, y=y3, palette="deep", ax=ax3)  
+ax3.axhline(0, color="k", clip_on=False)  
+ax3.set_ylabel("Qualitative")  
+  
+# Finalize the plot  
+sns.despine(bottom=True)  
+plt.setp(f.axes, yticks=[])  
+plt.tight_layout(h_pad=2)
+
+------------------------------------------------
+
+SEABORN Plots ALL-IN-ONE (Using CSV)
+
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('Advertising.csv')
+sns.lineplot(x='TV', y='sales', data=df)
+plt.show()
+
+sns.barplot(x='TV', y='sales', data=df)
+plt.show()
+
+sns.scatterplot(x='TV', y='sales', data=df)
+plt.show()
+
+sns.histplot(data=df, x='sales')
+plt.show()
+
+------------------------------------------------
+
+# K-Means
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+sns.set()
+import statsmodels.api as sm
+from sklearn.cluster import KMeans
+
+# Read the dataset from a CSV file
+data = pd.read_csv("50_Startups.csv")
+
+# Display the dataset
+data
+
+# Select the features for clustering
+x = data.iloc[:, 1:3]
+
+# Display the selected features
+x
+
+# Create an instance of the KMeans clustering algorithm with 3 clusters
+kmean = KMeans(3)
+
+# Fit the KMeans model to the data
+kmean.fit(x)
+
+# Predict the cluster labels for the data points
+identified_c = kmean.predict(x)
+
+# Create a copy of the dataset with an additional 'Cluster' column
+data_c = data.copy()
+data_c['Cluster'] = identified_c
+
+# Create a scatter plot to visualize the clusters
+plt.scatter(data_c['Administration'], data_c['Marketing Spend'], c=data_c['Cluster'], cmap='rainbow')
+
+
+
+------------------------------------------------
+
